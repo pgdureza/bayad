@@ -1,6 +1,6 @@
 const CashInService = require('./CashInService');
 const CashOutJuridicalService = require('./CashOutJuridicalService');
-const CashOutTransactionNatural = require('./CashOutNaturalService');
+const CashOutNaturalService = require('./CashOutNaturalService');
 
 module.exports = class OperationService {
   constructor(config, transactions) {
@@ -24,7 +24,7 @@ module.exports = class OperationService {
         return new CashOutJuridicalService(this.config.cashOut.juridical).calculateFee(amount);
       }
       if (userType === 'natural') {
-        return new CashOutTransactionNatural(this.config.cashOut.natural).calculateFee(
+        return new CashOutNaturalService(this.config.cashOut.natural).calculateFee(
           amount,
           date,
           userId

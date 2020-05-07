@@ -16,6 +16,7 @@ const processTransactions = async () => {
   const fees = operationService.comissionFees;
 
   fees.forEach(function print(fee) {
+    // eslint-disable-next-line no-console
     console.log(fee.toFixed(2));
   });
 };

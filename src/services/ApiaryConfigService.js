@@ -1,4 +1,4 @@
-const fetchData = require('../utils/fetchData');
+const network = require('../utils/network');
 
 class ApiaryConfigService {
   constructor() {
@@ -6,9 +6,9 @@ class ApiaryConfigService {
   }
 
   async initialize() {
-    const cashOutJuridical = await fetchData(`${this.baseURL}/config/cash-out/juridical`);
-    const cashOutNatural = await fetchData(`${this.baseURL}/config/cash-out/natural`);
-    const cashInConfig = await fetchData(`${this.baseURL}/config/cash-in`);
+    const cashOutJuridical = await network.fetch(`${this.baseURL}/config/cash-out/juridical`);
+    const cashOutNatural = await network.fetch(`${this.baseURL}/config/cash-out/natural`);
+    const cashInConfig = await network.fetch(`${this.baseURL}/config/cash-in`);
     this.config = {
       cashOut: {
         juridical: cashOutJuridical,
