@@ -4,7 +4,9 @@ Node project that computes for cash operation commission fees.
 
 ## Getting Started
 
-use node version v12.16.2
+versions used
+node version v12.16.2
+npm 6.14.4
 
 1. `npm install` to download dependencies
 2. make a copy of `.env.sample` and rename to just `.env`. Add the ApiaryConfig API here.

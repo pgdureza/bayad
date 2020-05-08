@@ -1,37 +1,26 @@
-const isSameISOWeek = require('date-fns/isSameISOWeek');
-const parseISO = require('date-fns/parseISO');
+const { getRoundedCalculatedFee } = require('../../utils/math');
+const getWeekTotalAmount = require('../../utils/getWeekTotalAmount');
 
-class CashOutNaturalService {
+module.exports = class CashOutNaturalService {
   constructor(config) {
     this.config = config;
+    this.operationsByUserId = {};
   }
 
-  static updateUserOperations(userId, date, amount) {
+  updateUserLastOperations(userId, date, amount) {
     this.operationsByUserId[userId] = { amount, date };
   }
 
-  static getUserLastOperationDate(userId) {
-    const userLastOperation = CashOutNaturalService.operationsByUserId[userId];
-    if (!userLastOperation) {
-      return null;
-    }
-    return userLastOperation.date;
+  getUserLastOperation(userId) {
+    return this.operationsByUserId[userId] || {};
   }
 
   calculateFee(amount, date, userId) {
-    const lastDate = CashOutNaturalService.getUserLastOperationDate(userId);
-    const isSameWeek = isSameISOWeek(parseISO(lastDate), parseISO(date), {
-      weekStartsOn: 1
-    });
+    const { date: lastDate, amount: lastAmount } = this.getUserLastOperation(userId);
 
-    let totalAmountThisWeek;
-    if (isSameWeek) {
-      const lastAmount = CashOutNaturalService.operationsByUserId[userId].amount;
-      totalAmountThisWeek = lastAmount + amount;
-    } else {
-      totalAmountThisWeek = amount;
-    }
-    CashOutNaturalService.updateUserOperations(
+    const totalAmountThisWeek = getWeekTotalAmount(lastDate, date, lastAmount, amount);
+
+    this.updateUserLastOperations(
       userId,
       date,
       Math.min(totalAmountThisWeek, this.config.week_limit.amount)
@@ -42,10 +31,6 @@ class CashOutNaturalService {
     }
 
     const weeklyExcessToLimit = totalAmountThisWeek - this.config.week_limit.amount;
-    return (weeklyExcessToLimit * this.config.percents) / 100;
+    return getRoundedCalculatedFee(weeklyExcessToLimit, this.config.percents);
   }
-}
-
-CashOutNaturalService.operationsByUserId = {};
-
-module.exports = CashOutNaturalService;
+};

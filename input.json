@@ -61,5 +61,19 @@
     "user_type": "natural",
     "type": "cash_out",
     "operation": { "amount": 300.0, "currency": "EUR" }
+  },
+  {
+    "date": "2020-06-06",
+    "user_id": 4,
+    "user_type": "natural",
+    "type": "cash_in",
+    "operation": { "amount": 11111.0, "currency": "EUR" }
+  },
+  {
+    "date": "2020-07-07",
+    "user_id": 4,
+    "user_type": "natural",
+    "type": "cash_in",
+    "operation": { "amount": 3211.0, "currency": "EUR" }
   }
 ]

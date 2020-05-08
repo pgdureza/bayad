@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const network = require('../utils/network');
 
 class ApiaryConfigService {
@@ -6,16 +7,27 @@ class ApiaryConfigService {
   }
 
   async initialize() {
-    const cashOutJuridical = await network.fetch(`${this.baseURL}/config/cash-out/juridical`);
-    const cashOutNatural = await network.fetch(`${this.baseURL}/config/cash-out/natural`);
-    const cashInConfig = await network.fetch(`${this.baseURL}/config/cash-in`);
-    this.config = {
-      cashOut: {
-        juridical: cashOutJuridical,
-        natural: cashOutNatural
-      },
-      cashIn: cashInConfig
-    };
+    try {
+      const [cashOutJuridical, cashOutNatural, cashInConfig] = await Promise.all([
+        network.fetch(`${this.baseURL}/config/cash-out/juridical`),
+        network.fetch(`${this.baseURL}/config/cash-out/natural`),
+        network.fetch(`${this.baseURL}/config/cash-in`)
+      ]);
+
+      this.config = {
+        cashOut: {
+          juridical: cashOutJuridical,
+          natural: cashOutNatural
+        },
+        cashIn: cashInConfig
+      };
+    } catch (error) {
+      console.error(
+        chalk.redBright(
+          'Unable to get config from API. Please check if API is live or if API_HOST is correct.'
+        )
+      );
+    }
   }
 }
 

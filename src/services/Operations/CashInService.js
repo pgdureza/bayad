@@ -1,10 +1,12 @@
+const { getRoundedCalculatedFee } = require('../../utils/math');
+
 module.exports = class CashInService {
   constructor(config) {
     this.config = config;
   }
 
   calculateFee(amount) {
-    const calculatedValue = (amount * this.config.percents) / 100;
+    const calculatedValue = getRoundedCalculatedFee(amount, this.config.percents);
     return Math.min(calculatedValue, this.config.max.amount);
   }
 };

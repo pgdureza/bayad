@@ -6,7 +6,7 @@ const mockTransactions = [
     user_id: 1,
     user_type: 'natural',
     type: 'cash_in',
-    operation: { amount: 200.0, currency: 'EUR' }
+    operation: { amount: 11111.0, currency: 'EUR' }
   },
   {
     date: '2016-01-06',
@@ -54,7 +54,7 @@ describe('OperationService', () => {
   const service = new OperationService(config, mockTransactions);
   describe('comissionFees', () => {
     it('returns an array of commission fees based on configuration and transactions', () => {
-      expect(service.comissionFees).toEqual([0.06, 0.9, 87]);
+      expect(service.comissionFees).toEqual([3.34, 0.9, 87]);
     });
   });
   describe('calculateFee', () => {

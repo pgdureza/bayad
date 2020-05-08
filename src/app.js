@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const readJSONFile = require('./utils/readJSONFile');
 const ApiaryConfigService = require('./services/ApiaryConfigService');
 const OperationService = require('./services/Operations/OperationService');
@@ -12,13 +13,16 @@ const processTransactions = async () => {
   await apiaryConfigService.initialize();
   const { config } = apiaryConfigService;
 
-  const operationService = new OperationService(config, transactions);
-  const fees = operationService.comissionFees;
+  if (config) {
+    const operationService = new OperationService(config, transactions);
+    const fees = operationService.comissionFees;
 
-  fees.forEach(function print(fee) {
-    // eslint-disable-next-line no-console
-    console.log(fee.toFixed(2));
-  });
+    fees.forEach(function print(fee) {
+      console.log(chalk.greenBright(fee.toFixed(2)));
+    });
+  }
 };
 
-processTransactions();
+if (transactions) {
+  processTransactions();
+}
